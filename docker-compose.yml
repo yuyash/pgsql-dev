@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  postgres-primary:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres-primary
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./config/primary:/etc/postgresql:ro
+      - ./data/primary:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    networks:
+      - postgres-replication-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  postgres-replica:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres-replica
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./config/replica:/etc/postgresql:ro
+      - ./data/replica:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    networks:
+      - postgres-replication-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+
+networks:
+  postgres-replication-net:
+    driver: bridge

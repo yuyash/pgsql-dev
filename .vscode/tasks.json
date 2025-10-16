@@ -1,0 +1,121 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Docker Images",
+      "type": "shell",
+      "command": "docker-compose build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Start Docker Compose",
+      "type": "shell",
+      "command": "docker-compose up -d",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Stop Docker Compose",
+      "type": "shell",
+      "command": "docker-compose down",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Rebuild and Restart",
+      "type": "shell",
+      "command": "docker-compose down && docker-compose build && docker-compose up -d",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "View Primary Logs",
+      "type": "shell",
+      "command": "docker-compose logs -f postgres-primary",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "View Replica Logs",
+      "type": "shell",
+      "command": "docker-compose logs -f postgres-replica",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Connect to Primary (psql)",
+      "type": "shell",
+      "command": "docker exec -it postgres-primary psql -U postgres",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Connect to Replica (psql)",
+      "type": "shell",
+      "command": "docker exec -it postgres-replica psql -U postgres",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Clean Data Directories",
+      "type": "shell",
+      "command": "docker-compose down -v && rm -rf data/primary/* data/replica/*",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Install gdbserver in Primary",
+      "type": "shell",
+      "command": "docker exec -u root postgres-primary apt-get update && docker exec -u root postgres-primary apt-get install -y gdbserver",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Install gdbserver in Replica",
+      "type": "shell",
+      "command": "docker exec -u root postgres-replica apt-get update && docker exec -u root postgres-replica apt-get install -y gdbserver",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
