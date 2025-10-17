@@ -44,7 +44,7 @@ A Docker-based development environment for building PostgreSQL from source and t
 Before building, you need to clone the PostgreSQL source code into the `postgresql/` directory:
 
 ```bash
-git clone git://git.postgresql.org/git/postgresql.git
+git clone https://git.postgresql.org/git/postgresql.git
 ```
 
 ## Build Instructions
