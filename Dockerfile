@@ -6,8 +6,6 @@ FROM ubuntu:latest AS builder
 # Install build prerequisites
 RUN apt-get update && apt install -y \
     build-essential \
-    git \
-    gdb \
     lcov \
     bison \
     flex \
@@ -78,7 +76,10 @@ RUN apt-get update && apt install -y \
     uuid-dev \
     libossp-uuid-dev \
     libipc-run-perl \
+    gdb \
     locales \
+    perl \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Generate locale

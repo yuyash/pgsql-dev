@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "attach",
       "program": "/usr/local/pgsql/bin/postgres",
-      "processId": "${command:pickProcess}",
+      "processId": "${command:pickRemoteProcess}",
       "MIMode": "gdb",
       "miDebuggerPath": "/usr/bin/gdb",
       "sourceFileMap": {
@@ -27,7 +27,7 @@
       "pipeTransport": {
         "pipeCwd": "${workspaceFolder}",
         "pipeProgram": "docker",
-        "pipeArgs": ["exec", "-i", "postgres-primary", "gdb"],
+        "pipeArgs": ["exec", "-i", "postgres-primary", "/bin/sh", "-c"],
         "debuggerPath": "/usr/bin/gdb"
       }
     },
@@ -36,7 +36,7 @@
       "type": "cppdbg",
       "request": "attach",
       "program": "/usr/local/pgsql/bin/postgres",
-      "processId": "${command:pickProcess}",
+      "processId": "${command:pickRemoteProcess}",
       "MIMode": "gdb",
       "miDebuggerPath": "/usr/bin/gdb",
       "sourceFileMap": {
@@ -57,7 +57,7 @@
       "pipeTransport": {
         "pipeCwd": "${workspaceFolder}",
         "pipeProgram": "docker",
-        "pipeArgs": ["exec", "-i", "postgres-replica", "gdb"],
+        "pipeArgs": ["exec", "-i", "postgres-replica", "/bin/sh", "-c"],
         "debuggerPath": "/usr/bin/gdb"
       }
     },
@@ -82,7 +82,7 @@
       "pipeTransport": {
         "pipeCwd": "${workspaceFolder}",
         "pipeProgram": "docker",
-        "pipeArgs": ["exec", "-i", "postgres-primary", "gdb"],
+        "pipeArgs": ["exec", "-i", "postgres-primary", "/bin/sh", "-c"],
         "debuggerPath": "/usr/bin/gdb"
       }
     }
