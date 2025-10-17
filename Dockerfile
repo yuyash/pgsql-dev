@@ -4,21 +4,35 @@
 FROM ubuntu:latest AS builder
 
 # Install build prerequisites
-RUN apt-get update && apt-get install -y \
-    gcc \
-    make \
-    autoconf \
-    automake \
-    libtool \
+RUN apt-get update && apt install -y \
+    build-essential \
+    git \
+    gdb \
+    lcov \
     bison \
     flex \
+    gettext \
+    locales \
     libreadline-dev \
-    zlib1g-dev \
+    perl \
+    libipc-run-perl \
     libssl-dev \
     libxml2-dev \
     libxslt1-dev \
     libicu-dev \
     pkg-config \
+    libkrb5-dev \
+    libldap-dev \
+    libpam0g-dev \
+    python3-dev \
+    tcl-dev \
+    libperl-dev \
+    libxslt1-dev \
+    libreadline-dev \
+    libedit-dev \
+    uuid-dev \
+    libossp-uuid-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy PostgreSQL source code
@@ -51,18 +65,24 @@ RUN make install
 FROM ubuntu:latest
 
 # Install runtime dependencies only
-RUN apt-get update && apt-get install -y \
-    libreadline8 \
-    zlib1g \
-    libssl3 \
-    libxml2 \
-    libxslt1.1 \
-    libicu72 \
+RUN apt-get update && apt install -y \
+    libkrb5-dev \
+    libldap-dev \
+    libpam0g-dev \
+    python3-dev \
+    tcl-dev \
+    libperl-dev \
+    libxslt1-dev \
+    libreadline-dev \
+    libedit-dev \
+    uuid-dev \
+    libossp-uuid-dev \
+    libipc-run-perl \
     locales \
     && rm -rf /var/lib/apt/lists/*
 
 # Generate locale
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+RUN locale-gen en_US.UTF-8
 
 # Set environment variables
 ENV LANG=en_US.UTF-8 \

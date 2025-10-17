@@ -37,6 +37,16 @@ A Docker-based development environment for building PostgreSQL from source and t
 └── postgresql/                   # PostgreSQL source code
 ```
 
+## Getting Started
+
+### Clone the PostgreSQL Repository
+
+Before building, you need to clone the PostgreSQL source code into the `postgresql/` directory:
+
+```bash
+git clone git://git.postgresql.org/git/postgresql.git
+```
+
 ## Build Instructions
 
 ### 1. Build the Docker Image
@@ -102,7 +112,7 @@ docker compose down
 
 To remove data volumes as well:
 ```bash
-docker compose down -v
+docker compose down
 rm -rf data/primary/* data/replica/*
 ```
 
@@ -246,7 +256,7 @@ On the replica, check subscription status:
 SELECT * FROM pg_stat_subscription;
 ```
 
-## Troubleshooting
+## Cheat Commands
 
 ### Issue: Containers Fail to Start
 

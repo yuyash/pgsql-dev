@@ -11,6 +11,7 @@ services:
     volumes:
       - ./config/primary:/etc/postgresql:ro
       - ./data/primary:/var/lib/postgresql/data
+      - ./postgresql:/usr/src/postgresql:ro
     environment:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data
@@ -23,6 +24,10 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
 
   postgres-replica:
     build:
@@ -34,6 +39,7 @@ services:
     volumes:
       - ./config/replica:/etc/postgresql:ro
       - ./data/replica:/var/lib/postgresql/data
+      - ./postgresql:/usr/src/postgresql:ro
     environment:
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data
@@ -46,6 +52,10 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
     depends_on:
       postgres-primary:
         condition: service_healthy

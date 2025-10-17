@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to Primary PostgreSQL",
+      "name": "Debug PostgreSQL Primary (Docker)",
       "type": "cppdbg",
       "request": "attach",
       "program": "/usr/local/pgsql/bin/postgres",
@@ -10,7 +10,67 @@
       "MIMode": "gdb",
       "miDebuggerPath": "/usr/bin/gdb",
       "sourceFileMap": {
-        "/build": "${workspaceFolder}/postgresql"
+        "/usr/src/postgresql": "${workspaceFolder}/postgresql"
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ],
+      "pipeTransport": {
+        "pipeCwd": "${workspaceFolder}",
+        "pipeProgram": "docker",
+        "pipeArgs": ["exec", "-i", "postgres-primary", "gdb"],
+        "debuggerPath": "/usr/bin/gdb"
+      }
+    },
+    {
+      "name": "Debug PostgreSQL Replica (Docker)",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "/usr/local/pgsql/bin/postgres",
+      "processId": "${command:pickProcess}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "sourceFileMap": {
+        "/usr/src/postgresql": "${workspaceFolder}/postgresql"
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ],
+      "pipeTransport": {
+        "pipeCwd": "${workspaceFolder}",
+        "pipeProgram": "docker",
+        "pipeArgs": ["exec", "-i", "postgres-replica", "gdb"],
+        "debuggerPath": "/usr/bin/gdb"
+      }
+    },
+    {
+      "name": "Debug PostgreSQL Backend Process",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "/usr/local/pgsql/bin/postgres",
+      "processId": "${input:backendPID}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "sourceFileMap": {
+        "/usr/src/postgresql": "${workspaceFolder}/postgresql"
       },
       "setupCommands": [
         {
@@ -20,84 +80,19 @@
         }
       ],
       "pipeTransport": {
-        "debuggerPath": "/usr/bin/gdb",
+        "pipeCwd": "${workspaceFolder}",
         "pipeProgram": "docker",
-        "pipeArgs": [
-          "exec",
-          "-i",
-          "postgres-primary",
-          "sh",
-          "-c"
-        ],
-        "pipeCwd": "${workspaceFolder}"
+        "pipeArgs": ["exec", "-i", "postgres-primary", "gdb"],
+        "debuggerPath": "/usr/bin/gdb"
       }
-    },
+    }
+  ],
+  "inputs": [
     {
-      "name": "Attach to Replica PostgreSQL",
-      "type": "cppdbg",
-      "request": "attach",
-      "program": "/usr/local/pgsql/bin/postgres",
-      "processId": "${command:pickProcess}",
-      "MIMode": "gdb",
-      "miDebuggerPath": "/usr/bin/gdb",
-      "sourceFileMap": {
-        "/build": "${workspaceFolder}/postgresql"
-      },
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ],
-      "pipeTransport": {
-        "debuggerPath": "/usr/bin/gdb",
-        "pipeProgram": "docker",
-        "pipeArgs": [
-          "exec",
-          "-i",
-          "postgres-replica",
-          "sh",
-          "-c"
-        ],
-        "pipeCwd": "${workspaceFolder}"
-      }
-    },
-    {
-      "name": "Debug Primary with gdbserver",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "/usr/local/pgsql/bin/postgres",
-      "miDebuggerServerAddress": "localhost:9001",
-      "MIMode": "gdb",
-      "sourceFileMap": {
-        "/build": "${workspaceFolder}/postgresql"
-      },
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
-    },
-    {
-      "name": "Debug Replica with gdbserver",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "/usr/local/pgsql/bin/postgres",
-      "miDebuggerServerAddress": "localhost:9002",
-      "MIMode": "gdb",
-      "sourceFileMap": {
-        "/build": "${workspaceFolder}/postgresql"
-      },
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
+      "id": "backendPID",
+      "type": "promptString",
+      "description": "Enter the PostgreSQL backend process ID to debug",
+      "default": ""
     }
   ]
 }

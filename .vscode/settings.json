@@ -1,0 +1,22 @@
+{
+  "C_Cpp.default.configurationProvider": "ms-vscode.cpptools",
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/postgresql/src/include",
+    "${workspaceFolder}/postgresql/src/backend",
+    "/usr/local/pgsql/include"
+  ],
+  "C_Cpp.default.defines": [
+    "HAVE_CONFIG_H"
+  ],
+  "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-arm64",
+  "files.associations": {
+    "*.h": "c",
+    "*.c": "c"
+  },
+  "search.exclude": {
+    "**/data": true,
+    "**/postgresql/tmp_install": true
+  }
+}
